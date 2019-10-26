@@ -20,11 +20,11 @@ public class Animal : MonoBehaviour, Interactive
 
 
     private Vector3 spawnPoint;
-    private Vector3 speedRect = Vector3.zero;
+    private Vector3 movingRect = Vector3.zero;
 
     private Rigidbody2D rb;
 
-    private bool isMoving = false;
+    protected bool isMoving = false;
     private bool isRunAway = false;
 
     private bool isFacingRight = false;
@@ -36,7 +36,17 @@ public class Animal : MonoBehaviour, Interactive
         throw new NotImplementedException();
     }
 
-    private void Start()
+    protected enum Direction
+    {
+        Left = 0,
+        Bottom,
+        Right,
+        Top
+    }
+
+    protected Direction direction = Direction.Left;
+
+    protected void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         spawnPoint = new Vector3(transform.position.x, transform.position.y);
@@ -62,10 +72,10 @@ public class Animal : MonoBehaviour, Interactive
         );
         behaviorTree.Start();
 
-        #if UNITY_EDITOR
-                Debugger debugger = (Debugger)this.gameObject.AddComponent(typeof(Debugger));
-                debugger.BehaviorTree = behaviorTree;
-        #endif
+#if UNITY_EDITOR
+        Debugger debugger = (Debugger) this.gameObject.AddComponent(typeof(Debugger));
+        debugger.BehaviorTree = behaviorTree;
+#endif
     }
 
     private void DecideStanding()
@@ -77,14 +87,18 @@ public class Animal : MonoBehaviour, Interactive
     {
         float x = Random.Range(-speedMultiplierX, speedMultiplierX);
 
+        if (Math.Abs(x) < 0.01)
+            return;
+
         if (transform.position.x > spawnPoint.x + allowedDistanceFromSpawnPoint.x)
             x = -Mathf.Abs(x);
-
         if (transform.position.x < spawnPoint.x - allowedDistanceFromSpawnPoint.x)
             x = Mathf.Abs(x);
 
-        speedRect = new Vector3(x, 0, 0);
-        Flip();
+        movingRect = new Vector3(x, 0, 0);
+
+        direction = x > 0 ? Direction.Right : Direction.Left;
+        //Flip();
 
         isMoving = true;
     }
@@ -92,13 +106,18 @@ public class Animal : MonoBehaviour, Interactive
     private void DecideMovingOnY()
     {
         float y = Random.Range(-speedMultiplierY, speedMultiplierY);
+
+        if (Math.Abs(y) < 0.01)
+            return;
+
         if (transform.position.y > spawnPoint.y + allowedDistanceFromSpawnPoint.y)
             y = -Mathf.Abs(y);
-
         if (transform.position.y < spawnPoint.y - allowedDistanceFromSpawnPoint.y)
             y = Mathf.Abs(y);
 
-        speedRect = new Vector3(0, y, 0);
+        movingRect = new Vector3(0, y, 0);
+
+        direction = y > 0 ? Direction.Top : Direction.Bottom;
 
         isMoving = true;
     }
@@ -106,9 +125,7 @@ public class Animal : MonoBehaviour, Interactive
     private void FixedUpdate()
     {
         if (isMoving)
-        {
-            rb.MovePosition(transform.position + Time.fixedDeltaTime * speed * 0.01f * speedRect);
-        }
+            rb.MovePosition(transform.position + Time.fixedDeltaTime * speed * 0.01f * movingRect);
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -128,16 +145,16 @@ public class Animal : MonoBehaviour, Interactive
 
     private void RunAway()
     {
-        if (Math.Abs(speedRect.x) > 0.01)
-            speedRect.x = Random.Range(0, 2) == 0 ? speedMultiplierX : -speedMultiplierX;
+        if (Math.Abs(movingRect.x) > 0.01)
+            movingRect.x = Random.Range(0, 2) == 0 ? speedMultiplierX : -speedMultiplierX;
         else
-            speedRect.y = Random.Range(0, 2) == 0 ? speedMultiplierY : -speedMultiplierY;
-        Flip();
+            movingRect.y = Random.Range(0, 2) == 0 ? speedMultiplierY : -speedMultiplierY;
+        //Flip();
     }
 
     private void Flip()
     {
-        if ((!isFacingRight && (speedRect.x < 0)) || (isFacingRight && (speedRect.x > 0)))
+        if ((!isFacingRight && (movingRect.x < 0)) || (isFacingRight && (movingRect.x > 0)))
             return;
 
         isFacingRight = !isFacingRight;
