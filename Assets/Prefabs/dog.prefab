@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2175260155962469326}
   - component: {fileID: 7776690915827148569}
   - component: {fileID: 8691385170791219191}
+  - component: {fileID: 9009245829723443683}
   m_Layer: 8
   m_Name: dog
   m_TagString: Animal
@@ -74,12 +75,13 @@ SpriteRenderer:
   m_SortingLayerID: -579881121
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b02ad744ddae8a94c941a179184f8af1, type: 3}
+  m_Sprite: {fileID: 1480917699468073914, guid: b02ad744ddae8a94c941a179184f8af1,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.32}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -117,9 +119,9 @@ BoxCollider2D:
   m_Offset: {x: 0.000000014901161, y: 0.33}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.49999997, y: 0.109146506}
+    pivot: {x: 0.5, y: 0.2}
     oldSize: {x: 1, y: 1}
-    newSize: {x: 0.32, y: 0.32}
+    newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -166,3 +168,22 @@ MonoBehaviour:
   speedMultiplierX: 5
   speedMultiplierY: 3
   allowedDistanceFromSpawnPoint: {x: 7, y: 7}
+--- !u!95 &9009245829723443683
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6300383951670607756}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c8f1a467d76e6a141a689ea03ede5c27, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

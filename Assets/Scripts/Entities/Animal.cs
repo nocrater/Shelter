@@ -30,6 +30,13 @@ public class Animal : MonoBehaviour, Interactive
     private bool isFacingRight = false;
 
     private Root behaviorTree;
+    
+    private Animator animator;
+    private static readonly int DirectionId = Animator.StringToHash("direction");
+    private static readonly int IsMoving = Animator.StringToHash("isMoving");
+
+    private Direction lastDirection;
+    private bool lastIsMoving;
 
     public virtual void OnClick()
     {
@@ -48,6 +55,10 @@ public class Animal : MonoBehaviour, Interactive
 
     protected void Start()
     {
+        animator = GetComponent<Animator>();
+        lastDirection = direction;
+        lastIsMoving = isMoving;
+        
         rb = GetComponent<Rigidbody2D>();
         spawnPoint = new Vector3(transform.position.x, transform.position.y);
 
@@ -76,6 +87,21 @@ public class Animal : MonoBehaviour, Interactive
         Debugger debugger = (Debugger) this.gameObject.AddComponent(typeof(Debugger));
         debugger.BehaviorTree = behaviorTree;
 #endif
+    }
+    
+    private void Update()
+    {
+        if (direction != lastDirection)
+        {
+            animator.SetInteger(DirectionId, (int) direction);
+            lastDirection = direction;
+        }
+
+        if (lastIsMoving != isMoving)
+        {
+            animator.SetBool(IsMoving, isMoving);
+            lastIsMoving = isMoving;
+        }
     }
 
     private void DecideStanding()
